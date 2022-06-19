@@ -1,13 +1,15 @@
 import React from "react";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router";
+import { Link } from "react-router-dom";
+import Signout from "../User/Signout";
 
 const isActive = (history, path) => {
-  if(history.location.pathname === path) {
-    return {color: "#ff9900"};
+  if (history.location.pathname === path) {
+    return { color: "#ff9900" };
   } else {
-    return {color: "#ffffff"};
+    return { color: "#ffffff" };
   }
-}
+};
 
 // Using destucturing from react router dom because we are using withRouter
 const Menu = ({ history }) => (
@@ -19,14 +21,33 @@ const Menu = ({ history }) => (
         </Link>
       </li>
       <li className="nav-item">
-        <Link className="nav-link" style={isActive(history, "/signin")} to="/signin">
+        <Link
+          className="nav-link"
+          style={isActive(history, "/signin")}
+          to="/signin"
+        >
           Signin
         </Link>
       </li>
       <li className="nav-item">
-        <Link className="nav-link" style={isActive(history, "/signup")} to="/signup">
+        <Link
+          className="nav-link"
+          style={isActive(history, "/signup")}
+          to="/signup"
+        >
           Signup
         </Link>
+      </li>
+      <li className="nav-item">
+        <span
+          className="nav-link"
+          style={{ cursor: "pointer", color: "white" }}
+          onClick={() => Signout(() => {
+            history.push("/");
+          })}
+        >
+          Signout
+        </span>
       </li>
     </ul>
   </div>
