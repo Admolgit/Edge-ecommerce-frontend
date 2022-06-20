@@ -2,6 +2,7 @@ import React from "react";
 import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import Signout from "../User/Signout";
+import isAuthenticated from "../../auth/showSign";
 
 const isActive = (history, path) => {
   if (history.location.pathname === path) {
@@ -20,35 +21,41 @@ const Menu = ({ history }) => (
           Home
         </Link>
       </li>
-      <li className="nav-item">
-        <Link
-          className="nav-link"
-          style={isActive(history, "/signin")}
-          to="/signin"
-        >
-          Signin
-        </Link>
-      </li>
-      <li className="nav-item">
-        <Link
-          className="nav-link"
-          style={isActive(history, "/signup")}
-          to="/signup"
-        >
-          Signup
-        </Link>
-      </li>
-      <li className="nav-item">
-        <span
-          className="nav-link"
-          style={{ cursor: "pointer", color: "white" }}
-          onClick={() => Signout(() => {
-            history.push("/");
-          })}
-        >
-          Signout
-        </span>
-      </li>
+      {!isAuthenticated() && (
+        <div>
+          <li className="nav-item">
+            <Link
+              className="nav-link"
+              style={isActive(history, "/signin")}
+              to="/signin"
+            >
+              Signin
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link
+              className="nav-link"
+              style={isActive(history, "/signup")}
+              to="/signup"
+            >
+              Signup
+            </Link>
+          </li>
+        </div>
+      )}
+      {isAuthenticated() && (
+        <li className="nav-item">
+          <span
+            className="nav-link"
+            style={{ cursor: "pointer", color: "white" }}
+            onClick={() => Signout(() => {
+              history.push("/");
+            })}
+          >
+            Signout
+          </span>
+        </li>
+      )}
     </ul>
   </div>
 );
