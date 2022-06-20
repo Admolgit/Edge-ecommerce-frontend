@@ -13,38 +13,59 @@ const isActive = (history, path) => {
 };
 
 // Using destucturing from react router dom because we are using withRouter
-const Menu = ({ history }) => (
-  <div>
-    <ul className="nav nav-tabs bg-primary">
-      <li className="nav-item">
-        <Link className="nav-link" style={isActive(history, "/")} to="/">
-          Home
-        </Link>
-      </li>
-      {!isAuthenticated() && (
-        <Fragment>
-          <li className="nav-item">
-            <Link
-              className="nav-link"
-              style={isActive(history, "/signin")}
-              to="/signin"
-            >
-              Signin
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link
-              className="nav-link"
-              style={isActive(history, "/signup")}
-              to="/signup"
-            >
-              Signup
-            </Link>
-          </li>
-        </Fragment>
-      )}
-      {isAuthenticated() && (
+const Menu = ({ history }) => {
+  
+  const { user: { name } } = isAuthenticated();
+  
+  return (
+    <div>
+      <ul className="nav nav-tabs bg-primary">
         <li className="nav-item">
+          <Link className="nav-link" style={isActive(history, "/")} to="/">
+            Home
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link className="nav-link" style={isActive(history, "/dashboard")} to="/dashboard">
+            Dashboard
+          </Link>
+        </li>
+        {!isAuthenticated() && (
+          <Fragment>
+            <li className="nav-item">
+              <Link
+                className="nav-link"
+                style={isActive(history, "/signin")}
+                to="/signin"
+              >
+                Signin
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link
+                className="nav-link"
+                style={isActive(history, "/signup")}
+                to="/signup"
+              >
+                Signup
+              </Link>
+            </li>
+          </Fragment>
+        )}
+        {isAuthenticated() && (
+          <>
+          <li className="nav-item">
+            <span
+              className="nav-link"
+              style={{ cursor: "pointer", color: "white" }}
+              onClick={() => Signout(() => {
+                history.push("/");
+              })}
+            >
+              Signout
+            </span>
+          </li>
+          <li className="nav-item">
           <span
             className="nav-link"
             style={{ cursor: "pointer", color: "white" }}
@@ -52,12 +73,14 @@ const Menu = ({ history }) => (
               history.push("/");
             })}
           >
-            Signout
+            Hello {name}
           </span>
         </li>
-      )}
-    </ul>
-  </div>
-);
+        </>
+        )}
+      </ul>
+    </div>
+  );
+};
 
 export default withRouter(Menu);
