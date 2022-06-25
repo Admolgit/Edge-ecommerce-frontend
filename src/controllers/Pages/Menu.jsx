@@ -15,7 +15,7 @@ const isActive = (history, path) => {
 // Using destucturing from react router dom because we are using withRouter
 const Menu = ({ history }) => {
   
-  const { user: { name } } = isAuthenticated();
+  // const { user: { name } } = isAuthenticated();
   
   return (
     <div>
@@ -25,11 +25,21 @@ const Menu = ({ history }) => {
             Home
           </Link>
         </li>
-        <li className="nav-item">
-          <Link className="nav-link" style={isActive(history, "/dashboard")} to="/dashboard">
+        {isAuthenticated() && isAuthenticated().user.role === 0 && (
+          <li className="nav-item">
+          <Link className="nav-link" style={isActive(history, "/user/dashboard")} to="/user/dashboard">
             Dashboard
           </Link>
         </li>
+        )}
+        {isAuthenticated() && isAuthenticated().user.role === 1 && (
+          <li className="nav-item">
+          <Link className="nav-link" style={isActive(history, "/admin/dashboard")} to="/admin/dashboard">
+            Dashboard
+          </Link>
+        </li>
+        )}
+
         {!isAuthenticated() && (
           <Fragment>
             <li className="nav-item">
@@ -73,7 +83,7 @@ const Menu = ({ history }) => {
               history.push("/");
             })}
           >
-            Hello {name}
+            Hello
           </span>
         </li>
         </>
