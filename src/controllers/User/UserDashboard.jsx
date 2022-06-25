@@ -5,7 +5,7 @@ import isAuthenticated from "../../auth/showSign"
 
 const Dashboard = () => {
 
-  const { user: { _id, name, email, role } } = isAuthenticated();
+  const { user: { name, email, role } } = isAuthenticated();
 
   const userLinks = () => {
     return (
@@ -68,7 +68,7 @@ const Dashboard = () => {
   return (
     <Layout title="Dashboard" description={`G'day ${name}`} className="container-fluid">
       <div className="row">
-        <div className="col-3">{adminLinks()}</div>
+        <div className="col-3">{userLinks()}</div>
         <div className="col-9">
           {adminLinks()}
           {purchaseHistory()}

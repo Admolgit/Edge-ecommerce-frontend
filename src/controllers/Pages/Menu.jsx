@@ -16,6 +16,7 @@ const isActive = (history, path) => {
 const Menu = ({ history }) => {
   
   // const { user: { name } } = isAuthenticated();
+  // console.log(isAuthenticated())
   
   return (
     <div>
@@ -83,7 +84,7 @@ const Menu = ({ history }) => {
               history.push("/");
             })}
           >
-            Hello
+            Hello 
           </span>
         </li>
         </>
