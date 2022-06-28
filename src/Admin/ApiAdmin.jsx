@@ -18,7 +18,7 @@ const createCategory = async (userId, token, category) => {
 };
 
 
-const createProduct = async (userId, token, product) => {
+export const createProduct = async (userId, token, product) => {
   // console.log(name, email, password);
   try {
     const response = await fetch(`http://localhost:8000/product/create/${userId}`, {
