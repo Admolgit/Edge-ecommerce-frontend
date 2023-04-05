@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import Layout from "../controllers/Pages/Layout";
 import isAuthenticated from "../auth/showSign";
-import { createProduct } from "./ApiAdmin";
+import { createProduct, getCategories } from "./ApiAdmin";
 
 const AddProduct = () => {
   const { user, token } = isAuthenticated();
@@ -10,7 +10,7 @@ const AddProduct = () => {
     name: "",
     description: "",
     price: "",
-    categories: [],
+    category: [],
     shipping: "",
     quantity: "",
     image: "",
@@ -22,138 +22,176 @@ const AddProduct = () => {
   });
 
   const {
-    name,
-    description,
-    price,
-    categories,
-    shipping,
-    quantity,
-    image,
-    loading,
-    error,
-    createdProduct,
-    redirectToProfile,
+    // name,
+    // description,
+    // price,
+    // category,
+    // shipping,
+    // quantity,
+    // image,
+    // loading,
+    // error,
+    // createdProduct,
+    // redirectToProfile,
     formData,
   } = values;
 
-  // This runs when the component mounts
+  const productCategory = async () => {
+    const initCategory = await getCategories();
+
+    console.log(initCategory);
+
+    if (initCategory.error) {
+      setValue({ ...values, error: initCategory.error });
+    } else {
+      setValue({ ...values, category: initCategory, formData: new FormData() });
+    }
+  };
+
+  // This runs when the component mounts and when component updates
   useEffect(() => {
-    setValue({...values, formData: new FormData()});
+    productCategory();
   }, []);
+
+  // console.log(values.category)
 
   const handleChange = (name) => (event) => {
     const value = name === "image" ? event.target.files[0] : event.target.value;
     formData.set(name, value);
     setValue({ ...values, [name]: value });
-  }
+  };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-  }
+
+    setValue({ ...values, error: "", loading: true });
+
+    const data = await createProduct(user._id, token, formData);
+    // .then(data => {
+    if (data.error) {
+      setValue({ ...values, error: data.error });
+    } else {
+      setValue({
+        ...values,
+        name: "",
+        description: "",
+        price: "",
+        quantity: "",
+        image: "",
+        loading: false,
+        createdProduct: data.name,
+      });
+    }
+    // })
+  };
+
+  const categ = values.category.lists;
+
+  console.log(categ);
 
   const newProductForm = () => (
-    <form className="mb-3" onSubmit={handleSubmit}>
+    <form className='mb-3' onSubmit={handleSubmit}>
       <h4>Post Image</h4>
-      <div className="form-group">
-        <label htmlFor="image" className="btn btn-secondary">
+      <div className='form-group'>
+        <label htmlFor='image' className='btn btn-secondary'>
           <input
-            type="file"
+            type='file'
             onChange={handleChange("image")}
-            name="image"
-            accept="image/*"
+            name='image'
+            accept='image/*'
           />
         </label>
       </div>
 
-      <div className="form-group">
-        <label htmlFor="name" className="text-muted">
+      <div className='form-group'>
+        <label htmlFor='name' className='text-muted'>
           Name
         </label>
         <input
-          type="text"
-          name="name"
-          className="form-control"
-          value={name}
+          type='text'
+          name='name'
+          className='form-control'
+          value={values.name}
           onChange={handleChange("name")}
         />
       </div>
 
-      <div className="form-group">
-        <label htmlFor="description" className="text-muted">
+      <div className='form-group'>
+        <label htmlFor='description' className='text-muted'>
           Description
         </label>
         <input
-          type="text"
-          name="description"
-          className="form-control"
-          value={description}
+          type='text'
+          name='description'
+          className='form-control'
+          value={values.description}
           onChange={handleChange("description")}
         />
       </div>
 
-      <div className="form-group">
-        <label htmlFor="price" className="text-muted">
+      <div className='form-group'>
+        <label htmlFor='price' className='text-muted'>
           Price
         </label>
         <input
-          type="number"
-          name="price"
-          className="form-control"
-          value={price}
+          type='number'
+          name='price'
+          className='form-control'
+          value={values.price}
           onChange={handleChange("price")}
         />
       </div>
 
-      <div className="form-group">
-        <label htmlFor="category" className="text-muted">
+      <div className='form-group'>
+        <label htmlFor='category' className='text-muted'>
           Category
         </label>
-        <select
-          className="form-control"
-          onChange={handleChange("category")}
-        >
-          <option value="62bb74d445299710ac33be3f">Node</option>
+        <select className='form-control' onChange={handleChange("category")}>
+          {/* <option>Select category</option> */}
+          {categ &&
+            categ.map((categoryId, index) => (
+              <option value={categoryId._id} key={index}>
+                {categoryId.name}
+              </option>
+            ))}
         </select>
       </div>
 
-      <div className="form-group">
-        <label htmlFor="shipping" className="text-muted">
+      <div className='form-group'>
+        <label htmlFor='shipping' className='text-muted'>
           Shipping
         </label>
-        <select
-          className="form-control"
-          onChange={handleChange("shipping")}
-        >
-          <option value="0">No</option>
-          <option value="1">Yes</option>
+        <select className='form-control' onChange={handleChange("shipping")}>
+          <option>Select shipping</option>
+          <option value='0'>No</option>
+          <option value='1'>Yes</option>
         </select>
       </div>
 
-      <div className="form-group">
-        <label htmlFor="quantity" className="text-muted">
+      <div className='form-group'>
+        <label htmlFor='quantity' className='text-muted'>
           Quantity
         </label>
         <input
-          type="number"
-          name="quantity"
-          className="form-control"
-          value={quantity}
+          type='number'
+          name='quantity'
+          className='form-control'
+          value={values.quantity}
           onChange={handleChange("quantity")}
         />
       </div>
 
-      <button className="btn btn-outline-primary">Create Product</button>
-
+      <button className='btn btn-outline-primary'>Create Product</button>
     </form>
   );
 
   return (
     <Layout
-      title="Add a new product"
+      title='Add a new product'
       description={`G'day ${user.name}, ready to add a product`}
     >
-      <div className="row">
-        <div className="col-md-8 offset-md-2">
+      <div className='row'>
+        <div className='col-md-8 offset-md-2'>
           {/* {showSuccess()}
             {showError()} */}
           {newProductForm()}

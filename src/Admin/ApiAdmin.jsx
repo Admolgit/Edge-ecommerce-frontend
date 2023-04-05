@@ -1,33 +1,52 @@
+// import axios from 'axios'
 
 const createCategory = async (userId, token, category) => {
-  // console.log(name, email, password);
   try {
-    const response = await fetch(`http://localhost:8000/category/create/${userId}`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify(category)
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/category/create/${userId}`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(category),
+      }
+    );
+    return await response.json();
+  } catch (err) {
+    return console.log(err.message);
+  }
+};
+
+export const createProduct = async (userId, token, product) => {
+  try {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/product/create/${userId}`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: product,
+      }
+    );
     return await response.json();
   } catch (err) {
     return console.log(err);
   }
 };
 
-
-export const createProduct = async (userId, token, product) => {
-  // console.log(name, email, password);
+export const getCategories = async (token) => {
   try {
-    const response = await fetch(`http://localhost:8000/product/create/${userId}`, {
-      method: "POST",
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/categories/all`, {
+      method: "GET",
       headers: {
         Accept: "application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-      body: product
     });
     return await response.json();
   } catch (err) {
@@ -37,5 +56,6 @@ export const createProduct = async (userId, token, product) => {
 
 export default {
   createCategory,
-  createProduct
+  createProduct,
+  getCategories,
 };

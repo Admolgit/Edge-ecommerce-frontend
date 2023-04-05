@@ -18,9 +18,18 @@ const AdminDashboard = () => {
           <li className="list-group-item">
             <Link className="nav-link" to="/create/product">Create Product</Link>
           </li>
-          {/* <li className="list-group-item">
-            <Link to="/signout">Signout</Link>
-          </li> */}
+          <li className="list-group-item">
+            <Link className="nav-link" to="/users">All Users</Link>
+          </li>
+          <li className="list-group-item">
+            <Link className="nav-link" to="/products">All Products</Link>
+          </li>
+          <li className="list-group-item">
+            <Link className="nav-link" to="/category/users">All Categories</Link>
+          </li>
+          <li className="list-group-item">
+            <Link className="nav-link" to="/signout">Signout</Link>
+          </li>
         </ul>
       </div>
     );
@@ -46,7 +55,7 @@ const AdminDashboard = () => {
   }
 
   return (
-    <Layout title="Dashboard" description={`G'day ${name}`} className="container-fluid">
+    <Layout title="Dashboard" description={`G'day ${name}`} text="Go Back" className="container-fluid">
       <div className="row">
         <div className="col-3">{adminLinks()}</div>
         <div className="col-9">

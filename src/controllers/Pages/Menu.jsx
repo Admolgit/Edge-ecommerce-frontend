@@ -19,7 +19,7 @@ const Menu = ({ history }) => {
   // console.log(isAuthenticated())
   
   return (
-    <div>
+    <>
       <ul className="nav nav-tabs bg-primary">
         <li className="nav-item">
           <Link className="nav-link" style={isActive(history, "/")} to="/">
@@ -90,7 +90,7 @@ const Menu = ({ history }) => {
         </>
         )}
       </ul>
-    </div>
+    </>
   );
 };
 

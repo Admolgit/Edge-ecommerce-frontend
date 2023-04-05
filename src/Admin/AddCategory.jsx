@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import Layout from "../controllers/Pages/Layout";
 import isAuthenticated from "../auth/showSign";
 import createCategory from "./ApiAdmin";
@@ -13,29 +13,32 @@ const AddCategory = () => {
   // Destructure name and token from localStorage
   const { user, token } = isAuthenticated();
 
+  console.log("User: " + JSON.parse(user), "Token: " + (token));
+
   const handleChange = (event) => {
     setError('');
     console.log(event.target.value);
     setName(event.target.value);
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault(); 
     setError('');
     setSuccess(false);
     // Api call from Add Category
-    createCategory(user._id, token, {name})
-      .then(data => {
-        if (data.error) {
-          setError(true);
-        } else {
-          setError('')
-          setSuccess(true);
-        }
-      }
-    )
+    const data = await createCategory(user['_id'], token, name);
+    console.log(data, "DATA")
+      // .then(data => {
+        // if (data.error) {
+        //   setError(true);
+        // } else {
+        //   setError('')
+        //   setSuccess(true);
+        // }
+    //   }
+    // )
   }
-
+console.log(name)
   const newCategoryForm = () => {
     return (
     <form onSubmit={handleSubmit}>
@@ -68,7 +71,7 @@ const AddCategory = () => {
   }
 
   return (
-    <Layout title="Add a new category" description={`G'day ${user.name}, ready to add a category`}>
+    <Layout title="Add a new category" description={`G'day ${user.name}, ready to add a category`} text="Go back">
         <div className="row">
           <div className="col-md-8 offset-md-2">
             {showSuccess()}
