@@ -39,13 +39,14 @@ const AddProduct = () => {
   const productCategory = async () => {
     const initCategory = await getCategories();
 
-    console.log(initCategory);
+    console.log(initCategory)
 
     if (initCategory.error) {
       setValue({ ...values, error: initCategory.error });
     } else {
       setValue({ ...values, category: initCategory, formData: new FormData() });
     }
+    
   };
 
   // This runs when the component mounts and when component updates
@@ -88,6 +89,19 @@ const AddProduct = () => {
   const categ = values.category.lists;
 
   console.log(categ);
+
+  const getTicketType = () => {
+    return categ && categ.map((item) => {
+      return (
+        <option
+          key={item._id}
+          value={item._id}
+        >
+          {item.name}
+        </option>
+      );
+    });
+  };
 
   const newProductForm = () => (
     <form className='mb-3' onSubmit={handleSubmit}>
@@ -147,13 +161,8 @@ const AddProduct = () => {
           Category
         </label>
         <select className='form-control' onChange={handleChange("category")}>
-          {/* <option>Select category</option> */}
-          {categ &&
-            categ.map((categoryId, index) => (
-              <option value={categoryId._id} key={index}>
-                {categoryId.name}
-              </option>
-            ))}
+          <option>Select category</option>
+          {getTicketType()}
         </select>
       </div>
 
@@ -162,7 +171,7 @@ const AddProduct = () => {
           Shipping
         </label>
         <select className='form-control' onChange={handleChange("shipping")}>
-          <option>Select shipping</option>
+         <option>Select shipping</option>
           <option value='0'>No</option>
           <option value='1'>Yes</option>
         </select>
